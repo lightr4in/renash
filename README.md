@@ -3,6 +3,8 @@
 renash is a command-line tool for renaming files based on their hash digest value.  
 It supports various hash algorithms such as MD5, SHA256, SHA512, SHA1, SHA3_256, SHA3_512, BLAKE2B, and BLAKE2S.
 
+This project has its origin in hashnamr which was the first prototype written in C# .NET.
+
 ## Installation
 
 There is currently one option for installing renash.
@@ -27,22 +29,6 @@ To uninstall renash, you can use the provided shell script:
 ```
 
 This will remove the symbolic link of the renash command from the \``~/.local/bin` directory.
-
-## Hash Algorithms
-
-The following hash algorithms are currently supported
-
-| Name       | Digest Size (bytes) | Digest size |
-|------------|---------------------|-------------|
-| `md5`      | 16                  | fixed       |
-| `sha256`   | 32                  | fixed       |
-| `sha512`   | 64                  | fixed       |
-| `sha1`     | 20                  | fixed       |
-| `sha3_256` | 32                  | fixed       |
-| `sha3_512` | 64                  | fixed       |
-| `sha3_512` | 64                  | fixed       |
-| `blake2b`  | <= 64               | variable    |
-| `blake2s`  | <= 32               | variable    |
 
 ## Usage
 
@@ -112,10 +98,28 @@ For instance, use digest size of 20 bytes for `blake2b` algorithm:
 renash --algorithm blake2b --size 20
 ```
 
+## Hash Algorithms
+
+The following hash algorithms are currently supported
+
+| Name       | Digest Size (bytes) | Digest size |
+|------------|---------------------|-------------|
+| `md5`      | 16                  | fixed       |
+| `sha256`   | 32                  | fixed       |
+| `sha512`   | 64                  | fixed       |
+| `sha1`     | 20                  | fixed       |
+| `sha3_256` | 32                  | fixed       |
+| `sha3_512` | 64                  | fixed       |
+| `sha3_512` | 64                  | fixed       |
+| `blake2b`  | <= 64               | variable    |
+| `blake2s`  | <= 32               | variable    |
+
 ## Note
 
 Use this tool with caution, as it may cause data loss if used improperly.  
 Make sure to back up your files before using this tool if in doubts.
+
+Did you know?
 
 ## Contribution
 
