@@ -58,6 +58,7 @@ Parameters wrapped in brackets `[ ]` are optional. Required parameters are wrapp
 [--algorithm <algorithm>] Sets the hash algorithm. Default: sha256. Available: md5, sha256, sha512, sha1, sha3_256, sha3_512, blake2b, blake2s
 [--directory <directory>] Sets the directory to process
 [--dry] Dry run. Only prints information about what would be done
+[--list] List supported algorithms and its (maximal) digest size
 [--patterns <patterns>] A comma-separated string of file name glob patterns. Example: "*.jpg,*.mp4"
 [--sloppy] Sloppy run. Skips files that look already properly named
 [--recursive] Processes the directory recursively
