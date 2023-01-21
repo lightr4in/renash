@@ -169,7 +169,7 @@ class FileService:
                      algorithm: HashAlgorithm,
                      digest_size: Optional[int],
                      recursive=False,
-                     quick_run=False,
+                     sloppy=False,
                      dry_run=False,
                      verbose_output=False) -> bool:
         """
@@ -179,7 +179,7 @@ class FileService:
         :param algorithm: The algorithm to use (HashAlgorithm)
         :param digest_size: The (output) digest byte size (Optional[int])
         :param recursive: Whether the specified directory should be processed recursively (bool)
-        :param quick_run: Whether matching files should be ignored (bool)
+        :param sloppy: Whether matching files should be ignored (bool)
         :param dry_run: Whether no persistent changes should be performed (bool)
         :param verbose_output: Whether output should be printed verbosely (bool)
         :returns: Whether renaming was successful (bool)
@@ -193,7 +193,7 @@ class FileService:
         if digest_size is not None:
             print(f"Using digest size {digest_size}")
 
-        hash_regex = HashService.get_hash_regex_if_quick(args.quick)
+        hash_regex = HashService.get_hash_regex_if_sloppy(args.sloppy)
 
         prefix = '**/' if recursive else ''
         name_patterns = [os.path.join(directory, prefix, pattern) for pattern in name_patterns]
@@ -209,10 +209,10 @@ class FileService:
                 if not FileService.is_file(file_path):
                     continue
 
-                if quick_run and HashService.guess_is_hash_string(file_path, hash_regex, hash_algorithm, digest_size):
+                if sloppy and HashService.guess_is_hash_string(file_path, hash_regex, hash_algorithm, digest_size):
                     StatsService.increment_skipped_count()
                     if verbose_output:
-                        print(f"Quick: File name {relative_source_file_name} seems already properly named. Skipping")
+                        print(f"Sloppy: File name {relative_source_file_name} seems already properly named. Skipping")
                     continue
 
                 file_hash = HashService.hash_file(file_path, hasher, digest_size)
@@ -299,13 +299,13 @@ class HashService:
         return None, algorithm
 
     @staticmethod
-    def get_hash_regex_if_quick(quick: bool) -> Optional[Pattern[AnyStr]]:
+    def get_hash_regex_if_sloppy(sloppy: bool) -> Optional[Pattern[AnyStr]]:
         """
-        Compiles and returns a new regex matching hexadecimal characters if runnnig in quick mode or None otherwise
-        :param quick: The quick run argument (str)
-        :return: The compiled regex (Pattern[AnyStr]) or None if quick is False
+        Compiles and returns a new regex matching hexadecimal characters if runnnig in sloppy mode or None otherwise
+        :param sloppy: Whether files should be guessed alread named correctly (bool)
+        :return: The compiled regex (Pattern[AnyStr]) or None if sloppy is False
         """
-        if quick:
+        if sloppy:
             return HashService.get_compiled_hex_regex()
         return None
 
@@ -448,7 +448,7 @@ def parse_args() -> Tuple:
     parser.add_argument('--dry', action='store_true', help='Dry run. Only prints info about what would be done')
     parser.add_argument('--patterns', default="*.*", type=str,
                         help='A comma separated string of file name glob patterns. Example: "*.jpg,*.mp4"')
-    parser.add_argument('--quick', action='store_true', help='Quick run. Skips files that look already properly named')
+    parser.add_argument('--sloppy', action='store_true', help='Sloppy run. Skips files that look already properly named')
     parser.add_argument('--size', type=int,
                         help=f'Sets the digest length to use. Works only for algorithms blake2b and blake2s')
     parser.add_argument('--recursive', action='store_true', help='Process directory recursively')
@@ -485,9 +485,9 @@ if __name__ == "__main__":
     if dry:
         print("Running in dry mode")
 
-    quick = args.quick
-    if quick:
-        print("Running in quick mode")
+    sloppy = args.sloppy
+    if sloppy:
+        print("Running in sloppy mode")
 
     verbose = args.verbose
     if verbose:
@@ -496,7 +496,7 @@ if __name__ == "__main__":
     print(f"Using algorithm {algorithm_name}")
 
     rename_success = FileService.rename_files(target_directory, pattern_list, hash_algorithm, args.size, recursive,
-                                              quick, dry, verbose)
+                                              sloppy, dry, verbose)
     if rename_success:
         print(StatsService.get_formatted(args.dry))
     else:
