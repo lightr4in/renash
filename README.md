@@ -74,8 +74,8 @@ renash --quick --patterns "*.jpg"
 
 ## Note
 
-Use this tool with caution, as it may cause data loss if used improperly.
-Make sure to back up your files before using this tool.
+Use this tool with caution, as it may cause data loss if used improperly.  
+Make sure to back up your files before using this tool if in doubts.
 
 ## Contribution
 
