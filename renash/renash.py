@@ -127,6 +127,10 @@ class FileService:
         return os.access(file_path, os.W_OK)
 
     @staticmethod
+    def is_file(path: str) -> bool:
+        return os.path.isfile(path) and os.path.exists(path)
+
+    @staticmethod
     def read_file(file_name: str) -> AnyStr or None:
         """
         Reads a file in binary mode and returns its contents
@@ -201,6 +205,9 @@ class FileService:
                 dir_path = os.path.dirname(file_path)
                 relative_directory = os.path.relpath(dir_path, directory)
                 relative_source_file_name = os.path.join(relative_directory, file_name)
+
+                if not FileService.is_file(file_path):
+                    continue
 
                 if quick_run and HashService.guess_is_hash_string(file_path, hash_regex, hash_algorithm, digest_size):
                     StatsService.increment_skipped_count()
