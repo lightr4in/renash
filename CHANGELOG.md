@@ -5,6 +5,7 @@
 ### Added
 - `--directory` argument to process a directory from another place  
 - `--recursive` support to process directories recursive 
+- `--list` argument to print supported algorithms
 
 ### Changed
 - Exchanged `--quick` by `--sloppy` 

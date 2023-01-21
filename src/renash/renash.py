@@ -430,6 +430,27 @@ def exit_with_version():
     exit(0)
 
 
+def exit_with_algorithm_list():
+    print('Supported algorithms:')
+
+    max_name_length = max(len(algorithm.value) for algorithm in HashAlgorithm)
+    columns = ['Algorithm', 'Digest Size', 'Variable length']
+    name_column_space_count = get_fill_space_count(max_name_length, columns[0])
+    size_column_space_count = get_fill_space_count(max_name_length, columns[1])
+    print(f"{columns[0]}{name_column_space_count}{columns[1]}{size_column_space_count}{' ' * 3}{columns[2]}")
+    for algorithm in HashAlgorithm:
+        name = algorithm.value
+        size = hash_algorithms[algorithm.value]['length']
+        variable_size = 'variable_length' in hash_algorithms[algorithm.value]
+        space_count = get_fill_space_count(max_name_length, name)
+        print(f"{name}{space_count}{size}            {variable_size}")
+    exit(0)
+
+
+def get_fill_space_count(max_length: int, label: str) -> str:
+    return ' ' * (max_length - len(label) + 3)
+
+
 def parse_args() -> Tuple:
     """
     Initialized and parse arguments and return them and the parser
@@ -446,9 +467,12 @@ def parse_args() -> Tuple:
     parser.add_argument('--algorithm', default='sha256', type=str,
                         help=f'Sets the hash algorithm. Available: {HashService.get_supported_hash_algorithms()}')
     parser.add_argument('--dry', action='store_true', help='Dry run. Only prints info about what would be done')
+    parser.add_argument('--list', action='store_true',
+                        help='Sets whether to output the supported algorithms with its maximum sizes')
     parser.add_argument('--patterns', default="*.*", type=str,
                         help='A comma separated string of file name glob patterns. Example: "*.jpg,*.mp4"')
-    parser.add_argument('--sloppy', action='store_true', help='Sloppy run. Skips files that look already properly named')
+    parser.add_argument('--sloppy', action='store_true',
+                        help='Sloppy run. Skips files that look already properly named')
     parser.add_argument('--size', type=int,
                         help=f'Sets the digest length to use. Works only for algorithms blake2b and blake2s')
     parser.add_argument('--recursive', action='store_true', help='Process directory recursively')
@@ -463,6 +487,9 @@ if __name__ == "__main__":
 
     if args.version:
         exit_with_version()
+
+    if args.list:
+        exit_with_algorithm_list()
 
     patterns = args.patterns
     pattern_list = args.patterns.split(',')
