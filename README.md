@@ -26,6 +26,22 @@ To uninstall renash, you can use the provided shell script:
 
 This will remove the symbolic link of the renash.py command from the ~/.local/bin directory.
 
+## Hash Algorithms
+
+The following hash algorithms are currently supported
+
+| Name       | Digest Size (bytes) | Digest size |
+|------------|---------------------|-------------|
+| `md5`      | 16                  | fixed       |
+| `sha256`   | 32                  | fixed       |
+| `sha512`   | 64                  | fixed       |
+| `sha1`     | 20                  | fixed       |
+| `sha3_256` | 32                  | fixed       |
+| `sha3_512` | 64                  | fixed       |
+| `sha3_512` | 64                  | fixed       |
+| `blake2b`  | <= 64               | variable    |
+| `blake2s`  | <= 32               | variable    |
+
 ## Usage
 
 ```shell
@@ -74,7 +90,7 @@ renash --quick --patterns "*.jpg"
 
 ### Custom Digest Size
 
-To customize the output digest size, you must use either `blake2b` or `blake2s` as hashing algorithm.
+To [customize the output digest size](#hash-algorithms), you must use either `blake2b` or `blake2s` as hashing algorithm.
 
 For instance, use digest size of 20 bytes for `blake2b` algorithm:
 
