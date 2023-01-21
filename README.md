@@ -33,7 +33,7 @@ This will remove the symbolic link of the renash command from the \``~/.local/bi
 ## Usage
 
 ```shell
-renash --patterns "*.jpg,*.mp4" --algorithm sha256 --dry --quick --verbose
+renash --patterns "*.jpg,*.mp4" --algorithm sha256 --dry --sloppy --verbose
 ```
 
 ### Parameters
@@ -45,7 +45,7 @@ Parameters wrapped in brackets `[ ]` are optional. Required parameters are wrapp
 [--directory <directory>] Sets the directory to process
 [--dry] Dry run. Only prints information about what would be done
 [--patterns <patterns>] A comma-separated string of file name glob patterns. Example: "*.jpg,*.mp4"
-[--quick] Quick run. Skips files that look already properly named
+[--sloppy] Sloppy run. Skips files that look already properly named
 [--recursive] Processes the directory recursively
 [--size <size>] Sets the digest length to use. Works only for algorithms blake2b and blake2s
 [--verbose] Print output verbosely
@@ -70,14 +70,14 @@ For instance, list all file changes _(any file)_ that would be made in the curre
 renash --dry
 ```
 
-### Quick Mode
+### Sloppy Mode
 
-The `--quick` switch allows ignoring files that look properly named i.e. like if they would have already been processed.
+The `--sloppy` switch allows ignoring files that look properly named i.e. like if they would have already been processed.
 
-For example, to rename all jpg files in the current directory to their sha256 hash value in quick mode:
+For example, to rename all jpg files in the current directory to their sha256 hash value in sloppy mode:
 
 ```shell
-renash --quick --patterns "*.jpg"
+renash --sloppy --patterns "*.jpg"
 ```
 
 
