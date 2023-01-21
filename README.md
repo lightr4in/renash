@@ -110,4 +110,4 @@ Feel free to open an issue or submit a pull request.
 
 ## License
 
-[GPLv3](LICENSE)
+[GPLv3](https://codeberg.org/lightrain/renash/src/branch/master/LICENSE)
