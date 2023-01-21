@@ -7,9 +7,17 @@ This project has its origin in hashnamr which was the first prototype written in
 
 ## Installation
 
-There is currently one option for installing renash.
+There are two options for installing renash.
 
-Using the provided shell script (unix):
+### Using pip:
+
+```shell
+pip install renash
+```
+
+This will install the package and make the renash command available globally on your system.
+
+### Using the provided install shell script:
 
 ```shell
 git clone https://codeberg.org/lightrain/renash.git
@@ -22,7 +30,13 @@ making it available for the current user.
 
 ## Uninstallation
 
-To uninstall renash, you can use the provided shell script:
+If you installed renash using pip, use this command:
+
+```shell
+pip uninstall renash
+```
+
+Else you can use the provided shell script:
 
 ```shell
 ./uninstall.sh
