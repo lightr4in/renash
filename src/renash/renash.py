@@ -425,7 +425,7 @@ def exit_with_version():
     """
     Print version and maintainer info and exit afterwards.
     """
-    print('renash 1.0')
+    print('renash 1.1')
     print('Maintained by lightrain')
     exit(0)
 

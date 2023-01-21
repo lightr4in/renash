@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## 1.1.0 - 22.01.2023
 
 ### Added
 - `--directory` argument to process a directory from another place  

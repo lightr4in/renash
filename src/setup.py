@@ -5,7 +5,7 @@ with open("../README.md", "r") as fh:
 
 setup(
     name='renash',
-    version='1.0.0',
+    version='1.1.0',
     author='lightrain',
     author_email='lightrain@storstad.net',
     description='A package that renames files to their hash value',
