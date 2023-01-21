@@ -431,6 +431,9 @@ def exit_with_version():
 
 
 def exit_with_algorithm_list():
+    """
+    Prints info about supported algorithms in table format and exit afterwards
+    """
     print('Supported algorithms:')
 
     max_name_length = max(len(algorithm.value) for algorithm in HashAlgorithm)
@@ -448,6 +451,11 @@ def exit_with_algorithm_list():
 
 
 def get_fill_space_count(max_length: int, label: str) -> str:
+    """
+    :param max_length: The maximum length of all columns (int)
+    :param label: The label that should be printed (str)
+    :returns: The count of whitespaces that is required to print tabular data prettily (str)
+    """
     return ' ' * (max_length - len(label) + 3)
 
 
