@@ -160,7 +160,8 @@ class FileService:
         return False
 
     @staticmethod
-    def rename_files(name_patterns: [str],
+    def rename_files(directory: str,
+                     name_patterns: [str],
                      algorithm: HashAlgorithm,
                      digest_size: Optional[int],
                      quick_run=False,
@@ -168,6 +169,7 @@ class FileService:
                      verbose=False) -> bool:
         """
         Renames files matching the specified patterns to their hash value
+        :param directory: The directory to process (str)
         :param name_patterns: The glob patterns to process ([str])
         :param algorithm: The algorithm to use (HashAlgorithm)
         :param digest_size: The (output) digest byte size (Optional[int])
@@ -185,27 +187,40 @@ class FileService:
 
         hash_regex = HashService.get_hash_regex_if_quick(args.quick)
 
+        name_patterns = [os.path.join(directory, pattern) for pattern in name_patterns]
+
         for pattern in name_patterns:
-            for file_name in glob.glob(pattern):
-                if quick_run and HashService.guess_is_hash_string(file_name, hash_regex, hash_algorithm, digest_size):
+            for file_path in glob.glob(pattern):
+                file_name = os.path.basename(file_path)
+
+                if quick_run and HashService.guess_is_hash_string(file_path, hash_regex, hash_algorithm, digest_size):
                     StatsService.increment_skipped_count()
                     if verbose:
                         print(f"Quick: File name {file_name} seems already properly named. Skipping")
                     continue
 
-                file_hash = HashService.hash_file(file_name, hasher, digest_size)
+                file_hash = HashService.hash_file(file_path, hasher, digest_size)
                 if file_hash is None:
                     StatsService.increment_error_count()
-                    print(f"Could not hash file {file_name}. Skipping")
+                    print(f"Could not hash file {file_path}. Skipping")
                     continue
-                new_file_name = file_hash + os.path.splitext(file_name)[1]
+
+                new_file_name = file_hash + os.path.splitext(file_path)[1]
+                directory_name = os.path.dirname(file_path)
+                new_file_path = os.path.join(directory_name, new_file_name)
+
+                if new_file_name == file_name:
+                    StatsService.increment_skipped_count()
+                    if verbose:
+                        print(f"File name {file_name} is already properly formatted. Skipping")
+                    continue
 
                 if not dry_run:
-                    rename_successful = FileService.rename_file(file_name, new_file_name)
+                    rename_successful = FileService.rename_file(file_path, new_file_path)
                     if rename_successful:
                         StatsService.increment_processed_count()
                         print(f"Renamed {file_name} to {new_file_name}")
-                elif FileService.has_move_access(file_name):
+                elif FileService.has_move_access(file_path):
                     print(f"Would rename {file_name} to {new_file_name}")
                     StatsService.increment_processed_count()
                 else:
@@ -405,7 +420,11 @@ def parse_args() -> Tuple:
 
     parser = argparse.ArgumentParser(description='Rename files to their hash value')
 
-    # Optional arguments
+    # Optional positional
+    parser.add_argument('directory', default='.', nargs='?', type=str,
+                        help='The directory to process. Use current directory if not set.')
+
+    # Optional
     parser.add_argument('--algorithm', default='sha256', type=str,
                         help=f'Sets the hash algorithm. Available: {HashService.get_supported_hash_algorithms()}')
     parser.add_argument('--dry', action='store_true', help='Dry run. Only prints info about what would be done')
@@ -428,12 +447,19 @@ if __name__ == "__main__":
 
     patterns = args.patterns.split(',')
 
+    directory = args.directory
+
+    absolute_path = os.path.abspath(directory)
+    print(f"Using directory {absolute_path}")
+
     hash_algorithm, algorithm_name = HashService.get_hash_algorithm_or_none(args.algorithm)
     if hash_algorithm is None:
         print(f"Unsupported algorithm: {algorithm_name}. Available: {HashService.get_supported_hash_algorithms()}")
         exit(126)
 
-    rename_success = FileService.rename_files(patterns, algorithm_name, args.size, args.quick, args.dry, args.verbose)
+
+    rename_success = FileService.rename_files(directory, patterns, algorithm_name, args.size, args.quick, args.dry,
+                                              args.verbose)
     if rename_success:
         print(StatsService.get_formatted(args.dry))
     else:
