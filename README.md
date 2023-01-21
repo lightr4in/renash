@@ -30,7 +30,13 @@ making it available for the current user.
 
 ## Uninstallation
 
-To uninstall renash, you can use the provided shell script:
+If you installed renash using pip, use this command:
+
+```shell
+pip uninstall renash
+```
+
+Else you can use the provided shell script:
 
 ```shell
 ./uninstall.sh
