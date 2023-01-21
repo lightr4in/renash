@@ -10,6 +10,8 @@ There is currently one option for installing renash.
 Using the provided shell script (unix):
 
 ```shell
+git clone https://codeberg.org/lightrain/renash.git
+cd renash
 ./install.sh
 ```
 
