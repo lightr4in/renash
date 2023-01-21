@@ -13,7 +13,7 @@ Using the provided shell script (unix):
 ./install.sh
 ```
 
-This will create a symbolic link of the renash.py command to the `~/.local/bin` directory,
+This will create a symbolic link of the renash command to the `~/.local/bin` directory,
 making it available for the current user.
 
 ## Uninstallation
@@ -24,7 +24,7 @@ To uninstall renash, you can use the provided shell script:
 ./uninstall.sh
 ```
 
-This will remove the symbolic link of the renash.py command from the ~/.local/bin directory.
+This will remove the symbolic link of the renash command from the \``~/.local/bin` directory.
 
 ## Usage
 
