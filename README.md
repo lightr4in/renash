@@ -72,6 +72,16 @@ For example, to rename all jpg files in the current directory to their sha256 ha
 renash --quick --patterns "*.jpg"
 ```
 
+### Custom Digest Size
+
+To customize the output digest size, you must use either `blake2b` or `blake2s` as hashing algorithm.
+
+For instance, use digest size of 20 bytes for `blake2b` algorithm:
+
+```shell
+renash --algorithm blake2b --size 20
+```
+
 ## Note
 
 Use this tool with caution, as it may cause data loss if used improperly.  
