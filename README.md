@@ -44,12 +44,32 @@ renash --patterns "*.jpg,*.mp4" --algorithm sha256 --dry --quick --verbose
 [--version]: Print version
 ```
 
-### Example
+## Example
 
-For example, to rename all jpeg and mp4 files in the current directory to their sha256 hash value:
+For example, to rename all jpg and mp4 files in the current directory to their sha256 hash value:
 
 ```shell
-renash --patterns "*.jpg,*.mp4" --algorithm sha256
+renash --patterns "*.jpg,*.mp4"
+```
+
+### Dry Mode
+
+Be sure to always use `--dry` switch to output all persistent file operations that would be executed without the switch.
+
+For instance, list all file changes _(any file)_ that would be made in the current directory:
+
+```shell
+renash --dry
+```
+
+### Quick Mode
+
+The `--quick` switch allows ignoring files that look properly named i.e. like if they would have already been processed.
+
+For example, to rename all jpg files in the current directory to their sha256 hash value in quick mode:
+
+```shell
+renash --quick --patterns "*.jpg"
 ```
 
 ## Note
