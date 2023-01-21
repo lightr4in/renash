@@ -164,6 +164,7 @@ class FileService:
                      name_patterns: [str],
                      algorithm: HashAlgorithm,
                      digest_size: Optional[int],
+                     recursive=False,
                      quick_run=False,
                      dry_run=False,
                      verbose_output=False) -> bool:
@@ -173,6 +174,7 @@ class FileService:
         :param name_patterns: The glob patterns to process ([str])
         :param algorithm: The algorithm to use (HashAlgorithm)
         :param digest_size: The (output) digest byte size (Optional[int])
+        :param recursive: Whether the specified directory should be processed recursively (bool)
         :param quick_run: Whether matching files should be ignored (bool)
         :param dry_run: Whether no persistent changes should be performed (bool)
         :param verbose_output: Whether output should be printed verbosely (bool)
@@ -189,22 +191,27 @@ class FileService:
 
         hash_regex = HashService.get_hash_regex_if_quick(args.quick)
 
-        name_patterns = [os.path.join(directory, pattern) for pattern in name_patterns]
+        prefix = '**/' if recursive else ''
+        name_patterns = [os.path.join(directory, prefix, pattern) for pattern in name_patterns]
 
         for pattern in name_patterns:
-            for file_path in glob.glob(pattern):
+            for file_path in glob.glob(pattern, recursive=recursive):
                 file_name = os.path.basename(file_path)
+
+                dir_path = os.path.dirname(file_path)
+                relative_directory = os.path.relpath(dir_path, directory)
+                relative_source_file_name = os.path.join(relative_directory, file_name)
 
                 if quick_run and HashService.guess_is_hash_string(file_path, hash_regex, hash_algorithm, digest_size):
                     StatsService.increment_skipped_count()
                     if verbose_output:
-                        print(f"Quick: File name {file_name} seems already properly named. Skipping")
+                        print(f"Quick: File name {relative_source_file_name} seems already properly named. Skipping")
                     continue
 
                 file_hash = HashService.hash_file(file_path, hasher, digest_size)
                 if file_hash is None:
                     StatsService.increment_error_count()
-                    print(f"Could not hash file {file_path}. Skipping")
+                    print(f"Could not hash file {relative_source_file_name}. Skipping")
                     continue
 
                 new_file_name = file_hash + os.path.splitext(file_path)[1]
@@ -214,19 +221,21 @@ class FileService:
                 if new_file_name == file_name:
                     StatsService.increment_skipped_count()
                     if verbose_output:
-                        print(f"File name {file_name} is already properly formatted. Skipping")
+                        print(f"File name {relative_source_file_name} is already properly formatted. Skipping")
                     continue
+
+                relative_target_file_name = os.path.join(relative_directory, new_file_name)
 
                 if not dry_run:
                     rename_successful = FileService.rename_file(file_path, new_file_path)
                     if rename_successful:
                         StatsService.increment_processed_count()
-                        print(f"Renamed {file_name} to {new_file_name}")
+                        print(f"Renamed {relative_source_file_name} to {relative_target_file_name}")
                 elif FileService.has_move_access(file_path):
-                    print(f"Would rename {file_name} to {new_file_name}")
+                    print(f"Would rename {relative_source_file_name} to {relative_target_file_name}")
                     StatsService.increment_processed_count()
                 else:
-                    print(f"Could not rename {file_name} to {new_file_name}")
+                    print(f"Could not rename {relative_source_file_name} to {relative_target_file_name}")
                     StatsService.increment_error_count()
         return True
 
@@ -435,6 +444,7 @@ def parse_args() -> Tuple:
     parser.add_argument('--quick', action='store_true', help='Quick run. Skips files that look already properly named')
     parser.add_argument('--size', type=int,
                         help=f'Sets the digest length to use. Works only for algorithms blake2b and blake2s')
+    parser.add_argument('--recursive', action='store_true', help='Process directory recursively')
     parser.add_argument('--verbose', action='store_true', help='Print output verbosely')
     parser.add_argument('--version', action='store_true', help='Print version')
 
@@ -453,8 +463,11 @@ if __name__ == "__main__":
 
     target_directory = args.directory
 
+    recursive = args.recursive or False
     absolute_path = os.path.abspath(target_directory)
-    print(f"Using directory {absolute_path}")
+    print(f"Using virtual base directory {absolute_path}")
+    if recursive:
+        print(f"Processing recursively")
 
     hash_algorithm, algorithm_name = HashService.get_hash_algorithm_or_none(args.algorithm)
     if hash_algorithm is None:
@@ -475,7 +488,8 @@ if __name__ == "__main__":
 
     print(f"Using algorithm {algorithm_name}")
 
-    rename_success = FileService.rename_files(target_directory, pattern_list, hash_algorithm, args.size, quick, dry, verbose)
+    rename_success = FileService.rename_files(target_directory, pattern_list, hash_algorithm, args.size, recursive,
+                                              quick, dry, verbose)
     if rename_success:
         print(StatsService.get_formatted(args.dry))
     else:
