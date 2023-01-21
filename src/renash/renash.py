@@ -423,7 +423,7 @@ class HashService:
 
 def exit_with_version():
     """
-    Print version and maintainer info and exit afterwards.
+    Prints version and maintainer info and exit afterwards.
     """
     print('renash 1.1')
     print('Maintained by lightrain')
