@@ -1,10 +1,13 @@
 # Changelog
 
-## 1.1 - <date>
+## [Unreleased]
 
 ### Added
 - `--directory` argument to process a directory from another place  
 - `--recursive` support to process directories recursive 
+
+### Changed
+- Exchanged `--quick` by `--sloppy` 
 
 ## 1.0 - 21.01.2023
 
