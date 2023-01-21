@@ -57,6 +57,7 @@ renash --patterns "*.jpg,*.mp4" --algorithm sha256 --dry --quick --verbose
 [--dry]: Dry run. Only prints information about what would be done
 [--patterns <patterns>]: A comma-separated string of file name glob patterns. Example: "*.jpg,*.mp4"
 [--quick]: Quick run. Skips files that look already properly named
+[--recursive]: Processes the directory recursively
 [--size <size>]: Sets the digest length to use. Works only for algorithms blake2b and blake2s
 [--verbose]: Print output verbosely
 [--version]: Print version
@@ -89,6 +90,16 @@ For example, to rename all jpg files in the current directory to their sha256 ha
 ```shell
 renash --quick --patterns "*.jpg"
 ```
+
+
+### Dry Recursive Mode
+
+To list any file inside a directory (recursively) which would be renamed, you can use the following command:
+
+```shell
+renash --directory <path> --dry --recursive
+```
+
 
 ### Custom Digest Size
 

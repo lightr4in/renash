@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1 - <date>
+
+### Added
+- `--recursive` support to process directories recursive 
+
 ## 1.0 - 21.01.2023
 
 ### Added
