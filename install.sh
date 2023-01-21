@@ -2,7 +2,8 @@
 
 set -e
 
-SCRIPT_PATH="renash/renash.py"
+SCRIPT_NAME="renash.py"
+SCRIPT_PATH="renash/$SCRIPT_NAME"
 BIN_DIR="$HOME/.local/bin"
 
 # Make sure the script file exists
@@ -17,6 +18,6 @@ if [ ! -d "$BIN_DIR" ]; then
 fi
 
 # Create a symbolic link to the script in the bin directory
-ln -s "$(pwd)/$SCRIPT_PATH" "$BIN_DIR/$SCRIPT_PATH"
+ln -s "$(pwd)/$SCRIPT_PATH" "$BIN_DIR/$SCRIPT_NAME"
 
 echo "Installed $SCRIPT_PATH to $BIN_DIR"
