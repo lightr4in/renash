@@ -38,16 +38,18 @@ renash --patterns "*.jpg,*.mp4" --algorithm sha256 --dry --quick --verbose
 
 ### Parameters
 
+Parameters wrapped in brackets `[ ]` are optional. Required parameters are wrapped in angle brackets `< >`.
+
 ```
-[--algorithm <algorithm>]: Sets the hash algorithm. Available: 'md5', 'sha256', 'sha512', 'sha1', 'sha3_256', 'sha3_512', 'blake2b', 'blake2s'. Default is 'sha256'
-[--directory <directory>]: Sets the directory to process
-[--dry]: Dry run. Only prints information about what would be done
-[--patterns <patterns>]: A comma-separated string of file name glob patterns. Example: "*.jpg,*.mp4"
-[--quick]: Quick run. Skips files that look already properly named
-[--recursive]: Processes the directory recursively
-[--size <size>]: Sets the digest length to use. Works only for algorithms blake2b and blake2s
-[--verbose]: Print output verbosely
-[--version]: Print version
+[--algorithm <algorithm>] Sets the hash algorithm. Default: sha256. Available: md5, sha256, sha512, sha1, sha3_256, sha3_512, blake2b, blake2s
+[--directory <directory>] Sets the directory to process
+[--dry] Dry run. Only prints information about what would be done
+[--patterns <patterns>] A comma-separated string of file name glob patterns. Example: "*.jpg,*.mp4"
+[--quick] Quick run. Skips files that look already properly named
+[--recursive] Processes the directory recursively
+[--size <size>] Sets the digest length to use. Works only for algorithms blake2b and blake2s
+[--verbose] Print output verbosely
+[--version] Print version
 ```
 
 ## Example
@@ -118,8 +120,6 @@ The following hash algorithms are currently supported
 
 Use this tool with caution, as it may cause data loss if used improperly.  
 Make sure to back up your files before using this tool if in doubts.
-
-Did you know?
 
 ## Contribution
 
