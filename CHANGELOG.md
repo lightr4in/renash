@@ -3,6 +3,7 @@
 ## 1.1 - <date>
 
 ### Added
+- `--directory` argument to process a directory from another place  
 - `--recursive` support to process directories recursive 
 
 ## 1.0 - 21.01.2023

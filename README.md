@@ -54,6 +54,7 @@ renash --patterns "*.jpg,*.mp4" --algorithm sha256 --dry --quick --verbose
 
 ```
 [--algorithm <algorithm>]: Sets the hash algorithm. Available: 'md5', 'sha256', 'sha512', 'sha1', 'sha3_256', 'sha3_512', 'blake2b', 'blake2s'. Default is 'sha256'
+[--directory <directory>]: Sets the directory to process
 [--dry]: Dry run. Only prints information about what would be done
 [--patterns <patterns>]: A comma-separated string of file name glob patterns. Example: "*.jpg,*.mp4"
 [--quick]: Quick run. Skips files that look already properly named
