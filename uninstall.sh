@@ -2,7 +2,7 @@
 
 set -e
 
-SCRIPT_NAME="renash.py"
+SCRIPT_NAME="renash"
 BIN_DIR="$HOME/.local/bin"
 FILE_PATH="$BIN_DIR/$SCRIPT_NAME"
 
