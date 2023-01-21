@@ -447,7 +447,9 @@ if __name__ == "__main__":
     if args.version:
         exit_with_version()
 
-    patterns = args.patterns.split(',')
+    patterns = args.patterns
+    pattern_list = args.patterns.split(',')
+    print(f"Using pattern{'s' if len(pattern_list) > 1 else ''}: {patterns}")
 
     target_directory = args.directory
 
@@ -473,7 +475,7 @@ if __name__ == "__main__":
 
     print(f"Using algorithm {algorithm_name}")
 
-    rename_success = FileService.rename_files(target_directory, patterns, hash_algorithm, args.size, quick, dry, verbose)
+    rename_success = FileService.rename_files(target_directory, pattern_list, hash_algorithm, args.size, quick, dry, verbose)
     if rename_success:
         print(StatsService.get_formatted(args.dry))
     else:
